@@ -16,7 +16,29 @@ En Windows:
 .\mvnw.cmd spring-boot:run
 ```
 
-La comprobación de estado queda disponible en `http://localhost:8080/health`.
+La comprobación de estado queda disponible en `http://localhost:8081/health`
+(o en el puerto indicado por `PORT`).
+
+## Monitoreo de disponibilidad
+
+`GET /health` es público y responde HTTP `200 OK` con este cuerpo JSON:
+
+```json
+{"status":"UP"}
+```
+
+Es una comprobación de que el servicio HTTP está vivo: no consulta RabbitMQ ni
+Brevo.
+
+Para consultarlo desde UptimeRobot o un monitor equivalente, configura un monitor
+HTTP(S) con la URL `https://<tu-servicio>.onrender.com/health`, método `GET`,
+intervalo de 5 minutos y código de respuesta esperado `200`.
+
+Render suspende los servicios gratuitos después de 15 minutos sin tráfico
+entrante. Las consultas externas cada 5 minutos deberían evitar esa suspensión
+por inactividad mientras el monitor siga activo. El servicio sigue sujeto a los
+límites del plan gratuito, incluidas las 750 horas mensuales compartidas por
+workspace. Consulta la [documentación de Render](https://render.com/docs/free).
 
 ## Ejecución local con Docker CLI
 
